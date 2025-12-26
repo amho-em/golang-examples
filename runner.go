@@ -13,6 +13,40 @@ import (
 )
 
 func main() {
+	fmt.Println(`1. Apps
+2. Tests`)
+	appTypeInput, err := getUserInput()
+	if err != nil {
+		log.Fatalf("Input error: %v", err)
+	}
+	if appTypeInput != 1 && appTypeInput != 2 {
+		log.Fatalln("Input error: the number is out of the range")
+	}
+
+	if appTypeInput == 1 {
+		runExecutableApp()
+		return
+	}
+	// todo
+	log.Println("Run Tests here ...")
+}
+
+func getUserInput() (int, error) {
+	fmt.Print("Choose a number: ")
+	reader := bufio.NewReader(os.Stdin)
+	inputStr, err := reader.ReadString('\n')
+	if err != nil {
+		return 0, err
+	}
+	inputStr = strings.TrimSpace(inputStr)
+	input, err := strconv.Atoi(inputStr)
+	if err != nil {
+		return 0, fmt.Errorf("expected 'a number (0-9)', got '%v'", inputStr)
+	}
+	return input, nil
+}
+
+func runExecutableApp() {
 	var runnableFiles []string
 
 	if err := filepath.WalkDir("examples", func(path string, d fs.DirEntry, err error) error {
@@ -34,24 +68,16 @@ func main() {
 	}
 
 	for i, v := range runnableFiles {
-		fmt.Printf("%d: '%s'\n", i+1, v)
+		fmt.Printf("\n%d: '%s'\n", i+1, v)
 	}
-	fmt.Print("Choose a number: ")
-	reader := bufio.NewReader(os.Stdin)
-	inputStr, err := reader.ReadString('\n')
+	appNumberInput, err := getUserInput()
 	if err != nil {
-		log.Fatalf("bufio error: %v\n", err)
+		log.Fatalf("Input error: %v", err)
 	}
-	inputStr = strings.TrimSpace(inputStr)
-	input, err := strconv.Atoi(inputStr)
-	if err != nil {
-		log.Fatalf("Input error: %v\n", err)
-	}
-
-	if input < 1 || input > appSize {
+	if appNumberInput < 1 || appNumberInput > appSize {
 		log.Fatalln("Input error: the number is out of the range")
 	}
-	chosenFile := runnableFiles[input-1]
+	chosenFile := runnableFiles[appNumberInput-1]
 
 	fmt.Println("\n"+strings.Repeat("=", 18), "Go", strings.Repeat("=", 18))
 	cmd := exec.Command("go", "run", chosenFile)
