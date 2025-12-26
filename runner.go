@@ -13,21 +13,48 @@ import (
 )
 
 func main() {
-	fmt.Println(`1. Apps
+	fmt.Println("Welcome to Runner!")
+	displayNewLine()
+	for {
+		fmt.Println(`1. Apps
 2. Tests`)
-	appTypeInput, err := getUserInput()
-	if err != nil {
-		log.Fatalf("Input error: %v", err)
-	}
-	if appTypeInput != 1 && appTypeInput != 2 {
-		log.Fatalln("Input error: the number is out of the range")
-	}
+		appTypeInput, err := getUserInput()
+		if err != nil {
+			log.Fatalf("Input error: %v", err)
+		}
+		if appTypeInput != 1 && appTypeInput != 2 {
+			log.Fatalln("Input error: the number is out of the range")
+		}
 
-	if appTypeInput == 1 {
-		runExecutableApp()
-		return
+		if appTypeInput == 1 {
+			runExecutableApp()
+		} else {
+			runTests()
+		}
+
+		fmt.Println("Do you want to continue?")
+		fmt.Println(`1. Yes
+2. No`)
+		runOrNot, err := getUserInput()
+		if err != nil {
+			log.Fatalf("Input error: %v", err)
+		}
+		if runOrNot != 1 && runOrNot != 2 {
+			log.Fatalln("Input error: the number is out of the range")
+		}
+
+		if runOrNot == 2 {
+			fmt.Println("\nBye!")
+			break
+		}
+
+		fmt.Println(strings.Repeat("-", 50))
+		fmt.Println(strings.Repeat("-", 50))
+		fmt.Println(strings.Repeat("-", 50))
+		fmt.Println(strings.Repeat("-", 50))
+		fmt.Println(strings.Repeat("-", 50))
+		fmt.Println(strings.Repeat("-", 50))
 	}
-	runTests()
 }
 
 func getUserInput() (int, error) {
