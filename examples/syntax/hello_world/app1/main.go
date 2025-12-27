@@ -1,15 +1,7 @@
 package main
 
-import (
-	"fmt"
-	"io"
-	"os"
-)
+import "fmt"
 
 func main() {
-	DisplayHelloWorld(os.Stdout)
-}
-
-func DisplayHelloWorld(w io.Writer) {
-	fmt.Fprintln(w, "Hello, World!")
+	fmt.Println("Hello, World!")
 }
