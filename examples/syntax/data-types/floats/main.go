@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Zero Values: 0
 
@@ -17,4 +20,14 @@ func main() {
 	)
 	fmt.Printf("%v: %T\n", a, a)
 	fmt.Printf("%v: %T\n", b, b)
+
+	var (
+		c = math.Inf(1)  // +Infinity
+		d = math.Inf(-1) // -Infinity
+
+		e = math.NaN() // Not a Number
+	)
+	fmt.Printf("%v: %T\n", c, c)
+	fmt.Printf("%v: %T\n", d, d)
+	fmt.Printf("%v: %T\n", e, e)
 }
