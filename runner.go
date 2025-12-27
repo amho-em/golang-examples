@@ -58,11 +58,11 @@ func getUserInput(prompt string, min, max int) int {
 		inputStr = strings.TrimSpace(inputStr)
 		input, err = strconv.Atoi(inputStr)
 		if err != nil {
-			log.Printf("Input error: expected 'a number (0-9)', got '%v'\n", inputStr)
+			log.Printf("Input error: expected 'a number (0-9)', got '%v'\n\n", inputStr)
 			continue
 		}
 		if input < min || input > max {
-			log.Printf("Validation error: Insert a number between %d and %d\n", min, max)
+			log.Printf("Validation error: Insert a number between %d and %d\n\n", min, max)
 			continue
 		}
 		break
