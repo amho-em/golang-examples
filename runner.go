@@ -87,8 +87,8 @@ func runExecutableApp() {
 
 	appSize := len(runnableFiles)
 	if appSize == 0 {
-		fmt.Println("No 'main.go' files found in 'examples' directory")
-		os.Exit(0)
+		fmt.Print("No 'main.go' files found in 'examples' directory\n\n")
+		return
 	}
 
 	var builder strings.Builder
@@ -106,8 +106,7 @@ func runExecutableApp() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		log.Printf("Program execution failed: %v", err)
-		os.Exit(1)
+		log.Printf("Program execution failed: %v\n", err)
 	}
 	fmt.Println(strings.Repeat("=", 44))
 }
@@ -139,8 +138,8 @@ func runTests() {
 
 	testsSize := len(testPackages)
 	if testsSize == 0 {
-		fmt.Println("No '*_test.go' files found in 'examples' directory")
-		os.Exit(0)
+		fmt.Print("No '*_test.go' files found in 'examples' directory\n\n")
+		return
 	}
 
 	var builder strings.Builder
@@ -158,8 +157,7 @@ func runTests() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		log.Printf("Test execution failed: %v", err)
-		os.Exit(1)
+		log.Printf("Test execution failed: %v\n", err)
 	}
 	fmt.Println(strings.Repeat("=", 45))
 }
