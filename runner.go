@@ -13,18 +13,13 @@ import (
 )
 
 func main() {
-	fmt.Println("Welcome to Runner!")
-	displayNewLine()
+	fmt.Print(`Welcome to Runner!
+
+`)
 	for {
-		fmt.Println(`1. Apps
-2. Tests`)
-		appTypeInput, err := getUserInput()
-		if err != nil {
-			log.Fatalf("Input error: %v", err)
-		}
-		if appTypeInput != 1 && appTypeInput != 2 {
-			log.Fatalln("Input error: the number is out of the range")
-		}
+		appTypeInput := getUserInput(`1. Apps
+2. Tests
+Choose a number: `, 1, 2)
 
 		if appTypeInput == 1 {
 			runExecutableApp()
@@ -32,16 +27,9 @@ func main() {
 			runTests()
 		}
 
-		fmt.Println("Do you want to continue?")
-		fmt.Println(`1. Yes
-2. No`)
-		runOrNot, err := getUserInput()
-		if err != nil {
-			log.Fatalf("Input error: %v", err)
-		}
-		if runOrNot != 1 && runOrNot != 2 {
-			log.Fatalln("Input error: the number is out of the range")
-		}
+		runOrNot := getUserInput(`1. Yes
+2. No
+Do you want to continue? `, 1, 2)
 
 		if runOrNot == 2 {
 			fmt.Println("\nBye!")
@@ -57,19 +45,29 @@ func main() {
 	}
 }
 
-func getUserInput() (int, error) {
-	fmt.Print("Choose a number: ")
-	reader := bufio.NewReader(os.Stdin)
-	inputStr, err := reader.ReadString('\n')
-	if err != nil {
-		return 0, err
+func getUserInput(prompt string, min, max int) int {
+	var input int
+	for {
+		fmt.Print(prompt)
+		reader := bufio.NewReader(os.Stdin)
+		inputStr, err := reader.ReadString('\n')
+		if err != nil {
+			log.Printf("Reader error: %v\n", err)
+			continue
+		}
+		inputStr = strings.TrimSpace(inputStr)
+		input, err = strconv.Atoi(inputStr)
+		if err != nil {
+			log.Printf("Input error: expected 'a number (0-9)', got '%v'\n", inputStr)
+			continue
+		}
+		if input < min || input > max {
+			log.Printf("Validation error: Insert a number between %d and %d\n", min, max)
+			continue
+		}
+		break
 	}
-	inputStr = strings.TrimSpace(inputStr)
-	input, err := strconv.Atoi(inputStr)
-	if err != nil {
-		return 0, fmt.Errorf("expected 'a number (0-9)', got '%v'", inputStr)
-	}
-	return input, nil
+	return input
 }
 
 func runExecutableApp() {
@@ -93,17 +91,14 @@ func runExecutableApp() {
 		os.Exit(0)
 	}
 
-	displayNewLine()
+	var builder strings.Builder
+	builder.WriteString("\n")
 	for i, v := range runnableFiles {
-		fmt.Printf("%d: '%s'\n", i+1, v)
+		fmt.Fprintf(&builder, "%d: '%s'\n", i+1, v)
 	}
-	appNumberInput, err := getUserInput()
-	if err != nil {
-		log.Fatalf("Input error: %v", err)
-	}
-	if appNumberInput < 1 || appNumberInput > appSize {
-		log.Fatalln("Input error: the number is out of the range")
-	}
+	builder.WriteString("Choose a number: ")
+	appNumberInput := getUserInput(builder.String(), 1, appSize)
+
 	chosenFile := runnableFiles[appNumberInput-1]
 
 	fmt.Println("\n"+strings.Repeat("=", 18), "Go RUN", strings.Repeat("=", 18))
@@ -148,18 +143,13 @@ func runTests() {
 		os.Exit(0)
 	}
 
-	displayNewLine()
+	var builder strings.Builder
+	builder.WriteString("\n")
 	for i, pkg := range testPackages {
-		fmt.Printf("%d: '%s'\n", i+1, pkg)
+		fmt.Fprintf(&builder, "%d: '%s'\n", i+1, pkg)
 	}
-
-	pkgNumber, err := getUserInput()
-	if err != nil {
-		log.Fatalf("Input error: %v", err)
-	}
-	if pkgNumber < 1 || pkgNumber > testsSize {
-		log.Fatalln("Input error: the number is out of the range")
-	}
+	builder.WriteString("Choose a number: ")
+	pkgNumber := getUserInput(builder.String(), 1, testsSize)
 
 	chosenPackage := testPackages[pkgNumber-1]
 
@@ -172,8 +162,4 @@ func runTests() {
 		os.Exit(1)
 	}
 	fmt.Println(strings.Repeat("=", 45))
-}
-
-func displayNewLine() {
-	fmt.Println()
 }
