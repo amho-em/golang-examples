@@ -44,8 +44,10 @@ func main() {
 
 		o byte // alias for 'uint8' (byte values)
 	)
+	ru := 'X' // X = 88 -> rune (single quotes '...')
 	fmt.Printf("%v: %T\n", i, i)
 	fmt.Printf("%v: %T\n", t, t)
 	fmt.Printf("%v: %T\n", r, r)
 	fmt.Printf("%v: %T\n", o, o)
+	fmt.Printf("%v: %T\n", ru, ru)
 }
